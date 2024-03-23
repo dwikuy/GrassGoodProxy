@@ -5,7 +5,7 @@
 - For linux distros: https://dev.to/ivayloiv/install-latest-python-version-on-any-linux-distro-5gc3
 #### Python3 module Installation
 - Install from requirements.txt
-```pip install json requests```
+```pip install json requests re```
 #### Install Extension for get cookie
 - https://chromewebstore.google.com/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm
 ## HOW TO USE
