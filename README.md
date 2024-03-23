@@ -11,7 +11,7 @@
 ## HOW TO USE
 #### How to get your grass userid
 - Login to https://app.getgrass.io
-- buka extension, kemudian export dan pilih json. simpan di cookie.json
+- buka extension cookie-editor, kemudian export dan pilih json. simpan di cookie.json
 ![cookie](https://github.com/dwikuy/GrassGoodProxy/assets/58757890/594801a2-05ca-4249-8796-a62dcb2377a0)
 
 #### Usage command
