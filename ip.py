@@ -6,13 +6,15 @@ def load_proxies(filename):
         proxies = file.readlines()
     proxy_dict = {}
     for proxy in proxies:
+        # Extract the IP for matching; maintain full proxy detail for storage
         if proxy.startswith(('http://', 'socks5://', 'socks4://')):
-            ip = proxy.split('@')[-1].split(':')[0]
-            proxy_dict[ip] = proxy.strip()
+            proxy_parts = proxy.split('@')[-1] if '@' in proxy else proxy.split('//')[-1]
+            ip = proxy_parts.split(':')[0]
+            proxy_dict[ip] = proxy.strip()  # Store full proxy string
     return proxy_dict
 
 def main():
-    cookie_file = input("Masukkan nama file cookie: ")
+    cookie_file = "cookie.json"
     with open(cookie_file, 'r') as f:
         cookies = json.load(f)
     
