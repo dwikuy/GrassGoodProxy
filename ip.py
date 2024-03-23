@@ -1,20 +1,30 @@
 import json
 import requests
+import re  # Import modul re untuk ekspresi reguler
 
-def load_proxies(filename):
-    with open(filename, 'r') as file:
-        proxies = file.readlines()
+def extract_ip_and_format(line):
+    """Ekstrak IP dan port dari berbagai format proxy dan kembalikan bersama format aslinya."""
+    pattern = r'(?:http|socks4|socks5)://(?:\w*:?[\w]*@)?([\d\.]+:\d+)'
+    match = re.search(pattern, line)
+    if match:
+        return match.group(1), line.strip()  # Kembalikan IP:port dan format asli
+    return None, None
+
+def read_proxy_file(filename):
+    """Membaca file proxy dan menyimpannya dalam dictionary."""
     proxy_dict = {}
-    for proxy in proxies:
-        # Extract the IP for matching; maintain full proxy detail for storage
-        if proxy.startswith(('http://', 'socks5://', 'socks4://')):
-            proxy_parts = proxy.split('@')[-1] if '@' in proxy else proxy.split('//')[-1]
-            ip = proxy_parts.split(':')[0]
-            proxy_dict[ip] = proxy.strip()  # Store full proxy string
+    with open(filename, 'r') as file:
+        for line in file:
+            ip_port, original_format = extract_ip_and_format(line)
+            if ip_port:
+                proxy_dict[ip_port] = original_format  # Simpan dengan kunci IP:port
     return proxy_dict
 
 def main():
     cookie_file = "cookie.json"
+    proxy_file = "proxy.txt"
+    output_file = "ipgood.txt"
+
     with open(cookie_file, 'r') as f:
         cookies = json.load(f)
     
@@ -39,18 +49,23 @@ def main():
     data = response.json()
     
     devices = data.get('data', {}).get('devices', [])
-    proxies = load_proxies("proxy.txt")
-    
-    with open("ipjoss.txt", 'w') as outfile:
+    proxy_data = read_proxy_file(proxy_file)
+
+    with open(output_file, 'w') as outfile:
         for device in devices:
             if device.get("is_proxy") is None:
                 ip = device.get("device_ip")
-                if ip in proxies:
-                    outfile.write(proxies[ip] + "\n")
-                    print(f"Proxy {proxies[ip]} disimpan.")
-                else:
+                ip_found = False
+                for ip_port in proxy_data.keys():
+                    if ip in ip_port:
+                        outfile.write(proxy_data[ip_port] + "\n")
+                        print(f"Format proxy untuk IP {ip} disimpan.")
+                        ip_found = True
+                        break
+                if not ip_found:
+                    # Jika IP tidak ditemukan dalam proxy.txt, simpan saja IP-nya
                     outfile.write(ip + "\n")
-                    print(f"IP {ip} disimpan.")
+                    print(f"IP {ip} disimpan karena tidak ditemukan dalam proxy.txt.")
 
 if __name__ == "__main__":
     main()
