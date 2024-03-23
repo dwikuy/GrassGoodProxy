@@ -18,5 +18,5 @@
 - Open file ```proxy.txt``` and insert your proxies
 - Open file ```cookie.json``` and insert your cookie grass
 - Run ```python ip.py``` 
-- jika terdapat ip yang bagus dan ada di list proxy.txt, maka akan tersimpan proxy serta port nya. jika tidak maka akan tersimpan ip nya saja
+- jika terdapat ip yang bagus dan ada di list proxy.txt, maka akan tersimpan proxy di ipgood.txt. jika tidak maka akan tersimpan ip nya saja
   
